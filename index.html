@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>numeron // little number machine</title>
+<meta name="description" content="a calculator that also tells you random stuff about the answer. built for the hack club calculate thing." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧮</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Patrick+Hand&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body data-theme="paper">
+
+<!-- little theme picker up top. click a dot, whole thing changes -->
+<div class="themebar">
+  <span class="themelabel">theme:</span>
+  <button class="dot" data-theme="paper" title="graph paper" style="background:#eae6d5"></button>
+  <button class="dot" data-theme="mint" title="mint receipt" style="background:#d7f0e3"></button>
+  <button class="dot" data-theme="crt" title="old crt" style="background:#0b1e12"></button>
+  <button class="dot" data-theme="bubble" title="bubblegum" style="background:#ffd7ec"></button>
+  <button class="dot" data-theme="casio" title="that beige calculator" style="background:#c8c2b0"></button>
+  <button class="sound" id="soundBtn" title="beep on keypress">🔇 sounds off</button>
+</div>
+
+<div class="page">
+
+  <header class="head">
+    <h1>numeron</h1>
+    <p class="sub">type some math. it answers, then rambles about the number.</p>
+    <svg class="squiggle" viewBox="0 0 200 12" preserveAspectRatio="none"><path d="M2 8 Q 20 2, 40 7 T 80 7 T 120 6 T 160 8 T 198 5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+  </header>
+
+  <div class="board">
+
+    <!-- the actual calculator, made to look like a chunky little device -->
+    <div class="device">
+      <div class="brand">numeron<span class="model">mk.2</span></div>
+
+      <div class="screen">
+        <input id="expr" type="text" spellcheck="false" autocomplete="off" placeholder="e.g.  12*9+7   or   sin(x)*x" />
+        <div class="answer" id="result">0</div>
+        <div class="oops" id="err"></div>
+      </div>
+
+      <div class="pad" id="pad">
+        <button class="b sm" data-ins="sin(">sin</button>
+        <button class="b sm" data-ins="cos(">cos</button>
+        <button class="b sm" data-ins="tan(">tan</button>
+        <button class="b sm" data-ins="log(">log</button>
+        <button class="b sm" data-ins="ln(">ln</button>
+
+        <button class="b sm" data-ins="sqrt(">√</button>
+        <button class="b sm" data-ins="(">(</button>
+        <button class="b sm" data-ins=")">)</button>
+        <button class="b sm" data-ins="^">xʸ</button>
+        <button class="b sm" data-ins="!">n!</button>
+
+        <button class="b" data-ins="7">7</button>
+        <button class="b" data-ins="8">8</button>
+        <button class="b" data-ins="9">9</button>
+        <button class="b o" data-ins="/">÷</button>
+        <button class="b p" data-ins="pi">π</button>
+
+        <button class="b" data-ins="4">4</button>
+        <button class="b" data-ins="5">5</button>
+        <button class="b" data-ins="6">6</button>
+        <button class="b o" data-ins="*">×</button>
+        <button class="b p" data-ins="e">e</button>
+
+        <button class="b" data-ins="1">1</button>
+        <button class="b" data-ins="2">2</button>
+        <button class="b" data-ins="3">3</button>
+        <button class="b o" data-ins="-">−</button>
+        <button class="b p" data-ins="x">x</button>
+
+        <button class="b" data-ins="0">0</button>
+        <button class="b" data-ins=".">.</button>
+        <button class="b wipe" id="clear">C</button>
+        <button class="b o" data-ins="+">+</button>
+        <button class="b go" id="equals">=</button>
+      </div>
+      <div class="note-arrow">put an <b>x</b> in there → it draws a graph!</div>
+    </div>
+
+    <!-- the sticky-note side. facts about whatever you just got -->
+    <div class="sidestack">
+
+      <div class="switcher">
+        <button class="pin on" data-show="facts">the number</button>
+        <button class="pin" data-show="graph">graph</button>
+        <button class="pin" data-show="tape">the tape</button>
+      </div>
+
+      <div class="sticky show" id="view-facts">
+        <div id="facts">
+          <p class="empty">do a calculation and i'll tell you what its answer secretly is. primes, binary, roman numerals, the works.</p>
+        </div>
+      </div>
+
+      <div class="sticky" id="view-graph">
+        <canvas id="graph" width="440" height="330"></canvas>
+        <p class="tiny" id="graphmeta">stick an x in your expression. drag to move it around, scroll to zoom.</p>
+      </div>
+
+      <div class="sticky" id="view-tape">
+        <ul id="history"><li class="empty">no history yet. go do some math.</li></ul>
+        <button id="clearHist" class="wipehist">rip off the tape</button>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="foot">
+    <p>made by hand for <a href="https://calculate.hackclub.com/">calculate</a>. the math parser is mine, wrote it with a shunting-yard because i wanted to actually get how it works. <a href="https://github.com/Downbeatfoil/numeron">code's here</a> if you wanna poke at it.</p>
+  </footer>
+
+</div>
+<script src="app.js"></script>
+</body>
+</html>
