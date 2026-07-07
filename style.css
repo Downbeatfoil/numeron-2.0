@@ -1,0 +1,212 @@
+/* numeron styles. warning: not super tidy, i kept fiddling with it.
+   theme stuff lives at the bottom. */
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0 14px 60px;
+  min-height: 100vh;
+  font-family: "Gaegu", system-ui, sans-serif;
+  color: var(--ink);
+  background-color: var(--bg);
+  background-image: var(--bgimg);
+  background-size: var(--bgsize, auto);
+  transition: background-color .25s;
+}
+
+/* handwriting for words, mono for anything that's a number */
+.mono, #expr, .answer, .val, #graphmeta, .b, #history li { font-family: "DM Mono", monospace; }
+
+/* ---- theme bar ---- */
+.themebar {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  padding: 12px 4px 0; max-width: 900px; margin: 0 auto;
+}
+.themelabel { font-size: 18px; opacity: .7; }
+.dot {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 2px solid var(--ink); cursor: pointer; padding: 0;
+  transition: transform .1s;
+}
+.dot:hover { transform: scale(1.2) rotate(8deg); }
+.dot.active { outline: 3px solid var(--accent); outline-offset: 2px; }
+.sound {
+  margin-left: auto; font-family: "Patrick Hand", sans-serif; font-size: 16px;
+  background: var(--card); color: var(--ink);
+  border: 2px solid var(--ink); border-radius: 20px; padding: 3px 12px; cursor: pointer;
+}
+.sound.on { background: var(--accent); color: var(--accent-ink); }
+
+.page { max-width: 900px; margin: 0 auto; }
+
+/* ---- header ---- */
+.head { margin: 18px 0 22px; position: relative; }
+h1 {
+  font-family: "Gaegu", sans-serif; font-weight: 700;
+  font-size: clamp(46px, 10vw, 74px); margin: 0; line-height: .9;
+  color: var(--ink); transform: rotate(-1.5deg);
+}
+.sub { font-family: "Patrick Hand", sans-serif; font-size: 20px; margin: 4px 0 0; opacity: .8; }
+.squiggle { display: block; width: 220px; height: 12px; color: var(--accent); margin-top: 2px; }
+
+/* ---- layout ---- */
+.board { display: grid; grid-template-columns: minmax(0,340px) minmax(0,1fr); gap: 26px; align-items: start; }
+@media (max-width: 720px){ .board { grid-template-columns: 1fr; } }
+
+/* ---- the calculator device ---- */
+.device {
+  background: var(--device);
+  border: 3px solid var(--ink);
+  border-radius: 18px;
+  padding: 14px 14px 18px;
+  box-shadow: 7px 8px 0 var(--shadow);
+  transform: rotate(-.6deg);
+  position: relative;
+}
+.brand { font-family: "Gaegu",sans-serif; font-weight:700; font-size: 24px; margin: 2px 4px 10px; display:flex; align-items:baseline; gap:6px; }
+.model { font-family:"DM Mono",monospace; font-size: 11px; opacity:.55; letter-spacing:1px; }
+
+.screen {
+  background: var(--screen);
+  color: var(--screen-ink);
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+}
+#expr {
+  width: 100%; background: transparent; border: none; outline: none;
+  color: var(--screen-ink); font-size: 17px; padding: 2px 0;
+}
+#expr::placeholder { color: var(--screen-ink); opacity: .4; }
+.answer {
+  font-size: clamp(26px, 7vw, 38px); font-weight: 500; text-align: right;
+  color: var(--screen-ink); word-break: break-all; min-height: 42px; line-height: 1.1;
+}
+.oops { color: var(--bad); font-size: 13px; text-align: right; min-height: 15px; font-family:"Patrick Hand",sans-serif; }
+
+.pad { display: grid; grid-template-columns: repeat(5, 1fr); gap: 7px; }
+.b {
+  font-size: 18px; padding: 12px 0; cursor: pointer;
+  background: var(--key); color: var(--ink);
+  border: 2px solid var(--ink); border-radius: 9px;
+  box-shadow: 0 3px 0 var(--keyshadow);
+  transition: transform .04s, box-shadow .04s;
+}
+.b:hover { filter: brightness(1.05); }
+.b:active { transform: translateY(3px); box-shadow: 0 0 0 var(--keyshadow); }
+.b.sm { font-size: 13px; padding: 10px 0; background: var(--key2); }
+.b.o { background: var(--keyop); color: var(--accent-ink); }
+.b.p { color: var(--accent); font-weight: 700; }
+.b.go { background: var(--accent); color: var(--accent-ink); font-weight: 700; }
+.b.wipe { color: var(--bad); }
+
+.note-arrow {
+  font-family: "Patrick Hand", sans-serif; font-size: 15px; opacity: .8;
+  margin: 12px 2px 0; transform: rotate(-1deg); color: var(--accent);
+}
+
+/* ---- sticky notes ---- */
+.sidestack { display: flex; flex-direction: column; gap: 16px; }
+.switcher { display: flex; gap: 6px; flex-wrap: wrap; }
+.pin {
+  font-family: "Patrick Hand", sans-serif; font-size: 16px; cursor: pointer;
+  background: var(--card); color: var(--ink);
+  border: 2px solid var(--ink); border-radius: 8px 8px 0 0;
+  padding: 5px 12px; transform: translateY(2px);
+}
+.pin.on { background: var(--accent); color: var(--accent-ink); transform: translateY(0); font-weight: bold; }
+
+.sticky {
+  display: none;
+  background: var(--card);
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  padding: 16px;
+  box-shadow: 5px 6px 0 var(--shadow);
+  position: relative;
+}
+.sticky.show { display: block; }
+.sticky:nth-child(2){ transform: rotate(.5deg); }
+/* fake bit of tape at the corner */
+.sticky::before {
+  content: ""; position: absolute; top: -9px; left: 24px;
+  width: 54px; height: 16px; background: var(--tape);
+  transform: rotate(-4deg); opacity: .85;
+}
+
+.empty { font-family: "Patrick Hand", sans-serif; font-size: 17px; opacity: .75; line-height: 1.4; margin: 4px 0; }
+
+/* facts list */
+#facts { display: flex; flex-direction: column; gap: 8px; }
+.fact { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; border-bottom: 2px dotted var(--dotline); padding: 4px 2px; }
+.fact .label { font-family:"Patrick Hand",sans-serif; font-size: 16px; opacity: .85; }
+.fact .val { font-size: 15px; text-align: right; word-break: break-all; }
+.fact .val.big { font-size: 22px; color: var(--accent); font-weight: 500; }
+.yeah { color: var(--good); font-weight: 700; }
+.nope { opacity: .55; }
+.tags { display:flex; flex-wrap:wrap; gap:5px; justify-content:flex-end; }
+.tag { font-family:"Patrick Hand",sans-serif; font-size:13px; padding:1px 9px; border:2px solid var(--ink); border-radius:20px; background: var(--accent); color: var(--accent-ink); transform: rotate(-2deg); }
+.tag:nth-child(even){ transform: rotate(2deg); }
+
+/* graph */
+#graph { width: 100%; height: auto; background: var(--screen); border: 2px solid var(--ink); border-radius: 6px; touch-action: none; cursor: grab; display:block; }
+#graph:active { cursor: grabbing; }
+.tiny { font-family:"Patrick Hand",sans-serif; font-size: 14px; opacity: .75; margin: 8px 0 0; }
+
+/* tape / history */
+#history { list-style: none; margin: 0 0 10px; padding: 0; display: flex; flex-direction: column; gap: 5px; max-height: 260px; overflow-y: auto; }
+#history li { font-size: 13px; padding: 6px 9px; background: var(--screen); color: var(--screen-ink); border: 1px dashed var(--ink); border-radius: 4px; cursor: pointer; display:flex; justify-content:space-between; gap:8px; }
+#history li:hover { filter: brightness(.97); }
+#history li .r { color: var(--accent); }
+.wipehist { font-family:"Patrick Hand",sans-serif; font-size:15px; background: transparent; border: 2px dashed var(--ink); border-radius:8px; padding: 5px 12px; cursor:pointer; color: var(--ink); }
+
+kbd { font-family:"DM Mono",monospace; border:1px solid var(--ink); border-radius:4px; padding:0 5px; font-size:12px; }
+
+.foot { margin-top: 34px; font-family:"Patrick Hand",sans-serif; font-size: 16px; opacity: .8; line-height: 1.5; }
+.foot a { color: var(--accent); text-decoration: underline wavy; }
+
+/* =====================================================================
+   THEMES. each one sets its own vars. i just hardcoded colors i liked.
+   ===================================================================== */
+
+/* graph paper (default) */
+body[data-theme="paper"]{
+  --bg:#f4f1e4; --ink:#2b2a26; --accent:#c2483a; --accent-ink:#fff; --good:#3c7a4a; --bad:#b23a2e;
+  --device:#fbfaf3; --screen:#e9f0e4; --screen-ink:#2b2a26; --card:#fffef7;
+  --key:#fff; --key2:#f0eee2; --keyop:#f6e7c8; --keyshadow:#cfc9b3;
+  --shadow:#d8d2bd; --tape:#e7dcae; --dotline:#cfc9b3;
+  --bgimg: linear-gradient(#dfe6d8 1px, transparent 1px), linear-gradient(90deg,#dfe6d8 1px, transparent 1px);
+  --bgsize: 26px 26px;
+}
+/* mint receipt */
+body[data-theme="mint"]{
+  --bg:#e9f7ef; --ink:#20362b; --accent:#0f9d6b; --accent-ink:#fff; --good:#0f9d6b; --bad:#c0392b;
+  --device:#ffffff; --screen:#f3fff9; --screen-ink:#20362b; --card:#ffffff;
+  --key:#f4fbf7; --key2:#eaf5ef; --keyop:#d6f0e2; --keyshadow:#bfe0cf;
+  --shadow:#cbe8d8; --tape:#bfe6d2; --dotline:#cbe8d8; --bgimg:none;
+}
+/* old crt terminal */
+body[data-theme="crt"]{
+  --bg:#07120b; --ink:#7dffab; --accent:#8affc1; --accent-ink:#04160c; --good:#7dffab; --bad:#ff8a7d;
+  --device:#0c1c12; --screen:#031007; --screen-ink:#54ff9f; --card:#0c1c12;
+  --key:#123021; --key2:#0f2519; --keyop:#164a30; --keyshadow:#041a0e;
+  --shadow:#020a05; --tape:#164a30; --dotline:#1c4a30;
+  --bgimg: repeating-linear-gradient(transparent 0 2px, rgba(0,0,0,.25) 2px 4px);
+}
+/* bubblegum (for the cute prize lol) */
+body[data-theme="bubble"]{
+  --bg:#ffeff7; --ink:#5b2a44; --accent:#ff5fa2; --accent-ink:#fff; --good:#e0559a; --bad:#e23c6a;
+  --device:#fff4fa; --screen:#ffe3f1; --screen-ink:#5b2a44; --card:#fffafd;
+  --key:#ffffff; --key2:#ffe9f4; --keyop:#ffd3e8; --keyshadow:#f3b8d6;
+  --shadow:#f6c3dc; --tape:#ffc0e0; --dotline:#f3c9de;
+  --bgimg: radial-gradient(#ffd0e8 2px, transparent 2px); --bgsize: 22px 22px;
+}
+/* the beige office calculator */
+body[data-theme="casio"]{
+  --bg:#d9d5c7; --ink:#33322c; --accent:#9a5b2a; --accent-ink:#fff; --good:#4a6b2f; --bad:#a13b2a;
+  --device:#c8c2b0; --screen:#adc0a2; --screen-ink:#1c2418; --card:#e3dfd2;
+  --key:#efece1; --key2:#d7d2c2; --keyop:#b9b3a0; --keyshadow:#a8a290;
+  --shadow:#a8a290; --tape:#cfc7ad; --dotline:#b6b0a0; --bgimg:none;
+}
